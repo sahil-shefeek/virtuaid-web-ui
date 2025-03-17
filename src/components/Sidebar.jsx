@@ -1,6 +1,6 @@
 import {NavLink} from "react-router-dom";
 import styles from "./Sidebar.module.scss";
-import Inclusys_Neuro_Org_logo_only from "@assets/Inclusys_Neuro_Org_logo_only.png"
+import logoImage from "@assets/web/icon-192.png"
 import useAuth from "@hooks/useAuth.jsx";
 
 function Sidebar() {
@@ -11,7 +11,10 @@ function Sidebar() {
         <aside>
             <div className={styles.top}>
                 <div className={styles.logo}>
-                    <img src={Inclusys_Neuro_Org_logo_only} alt="logo"></img>
+                    <img 
+                        src={logoImage} 
+                        alt="logo"
+                    ></img>
                     <h2>VirtuAid <small>Administration</small></h2>
                 </div>
                 <div className={styles.close} id="close-btn">

@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState} from "react";
+import { useEffect, useRef, useState } from "react";
 import useAuth from "@hooks/useAuth.jsx";
 import {
     Alert,
@@ -10,9 +10,9 @@ import {
     Row,
     Spinner,
 } from "react-bootstrap";
-import {useNavigate, useLocation} from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "@/api/axios.js";
-import Inclusys_Neuro_Org_nobg from "@assets/Inclusys_Neuro_Org_nobg.png";
+import logoImage from "@assets/web/icon-192.png";
 import Punarjeeva_efx from "@assets/Punarjeeva_efx.png";
 import useLocalStorage from "@hooks/useLocalStorage.jsx";
 import styles from "./LoginPage.module.scss";
@@ -28,7 +28,7 @@ function LoginPage() {
     const [errorMessage, setErrorMessage] = useState("");
     const [loading, setLoading] = useState(false);
 
-    const {setAuth} = useAuth();
+    const { setAuth } = useAuth();
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -49,9 +49,9 @@ function LoginPage() {
             setLoading(true);
             const response = await axios.post(
                 LOGIN_ENDPOINT,
-                JSON.stringify({email, password}),
+                JSON.stringify({ email, password }),
                 {
-                    headers: {"Content-Type": "application/json"},
+                    headers: { "Content-Type": "application/json" },
                     withCredentials: true,
                 },
             );
@@ -62,16 +62,16 @@ function LoginPage() {
             const isManager = response?.data?.is_manager;
             if (!isManager) {
                 setAuth({
-                name,
-                email,
-                password,
-                isSuperAdmin,
-                isAdmin,
-                accessToken,
-            });
-            navigate(from, {replace: true});
-            setEmail("");
-            setPassword("");
+                    name,
+                    email,
+                    password,
+                    isSuperAdmin,
+                    isAdmin,
+                    accessToken,
+                });
+                navigate(from, { replace: true });
+                setEmail("");
+                setPassword("");
             } else {
                 setErrorMessage("Unauthorized. Manager accounts are not allowed.")
             }
@@ -102,7 +102,11 @@ function LoginPage() {
                         <Card.Body className="p-3 p-md-4 p-xl-5">
                             <div className="text-center mb-3">
                                 <a href="#">
-                                    <img src={Inclusys_Neuro_Org_nobg} alt="Inclusys Logo"/>
+                                    <img
+                                        src={logoImage}
+                                        alt="Inclusys Logo"
+                                        style={{ maxWidth: '80px', height: 'auto' }}
+                                    />
                                 </a>
                             </div>
                             <h1 className="fs-3 fw-normal text-center mb-4">
@@ -187,15 +191,6 @@ function LoginPage() {
                         </Card.Body>
                     </Card>
                 </Col>
-                <Row>
-                    <Col>
-                        <img
-                            className={styles.logo}
-                            src={Punarjeeva_efx}
-                            alt="punarjeeva-logo"
-                        />
-                    </Col>
-                </Row>
             </Container>
         </section>
     );
