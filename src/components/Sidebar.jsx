@@ -12,7 +12,7 @@ function Sidebar() {
             <div className={styles.top}>
                 <div className={styles.logo}>
                     <img src={Inclusys_Neuro_Org_logo_only} alt="logo"></img>
-                    <h2>Virtuheal <small>Administration</small></h2>
+                    <h2>VirtuAid <small>Administration</small></h2>
                 </div>
                 <div className={styles.close} id="close-btn">
                     <span className="material-symbols-rounded">close</span>

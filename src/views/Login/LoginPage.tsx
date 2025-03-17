@@ -28,7 +28,7 @@ function LoginPage() {
     const [errorMessage, setErrorMessage] = useState("");
     const [loading, setLoading] = useState(false);
 
-    const {auth, setAuth} = useAuth();
+    const {setAuth} = useAuth();
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -36,7 +36,7 @@ function LoginPage() {
 
     useEffect(() => {
         emailRef.current.focus();
-        document.title = "Virtuheal Administration";
+        document.title = "VirtuAid Administration";
     }, []);
 
     useEffect(() => {
@@ -106,7 +106,7 @@ function LoginPage() {
                                 </a>
                             </div>
                             <h1 className="fs-3 fw-normal text-center mb-4">
-                                Virtuheal Administration
+                                VirtuAid Administration
                             </h1>
                             <h2 className="fs-6 fw-normal text-center text-secondary mb-4">
                                 Sign in to your account

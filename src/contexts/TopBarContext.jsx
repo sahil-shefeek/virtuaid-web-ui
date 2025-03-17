@@ -4,7 +4,7 @@ import {createContext, useState} from 'react';
 const TopBarContext = createContext();
 
 export const TopBarProvider = ({children}) => {
-    const [title, setTitle] = useState('Virtuheal Administration');
+    const [title, setTitle] = useState('VirtuAid Administration');
     return (
         <TopBarContext.Provider value={{title, setTitle}}>
             {children}
