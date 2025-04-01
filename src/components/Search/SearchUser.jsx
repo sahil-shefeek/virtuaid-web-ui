@@ -13,7 +13,7 @@ function SearchUser() {
     const fetchData = async () => {
         setIsLoading(true);
         try {
-            const response = await axiosPrivate.get("/associates/",
+            const response = await axiosPrivate.get("/residents/",
             {
                 params: {
                     limit: 10

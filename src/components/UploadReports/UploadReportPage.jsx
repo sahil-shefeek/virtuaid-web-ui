@@ -52,7 +52,7 @@ function UploadReportPage() {
         setSuccessMessage("");
 
         const formData = new FormData();
-        formData.append("associate", url);
+        formData.append("resident", url);
         formData.append("report_month", selectedDate.toISOString().split('T')[0]);
         formData.append("pdf", selectedFile);
         formData.append("description", note);

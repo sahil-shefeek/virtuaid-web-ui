@@ -17,10 +17,10 @@ import useTopBar from "@hooks/useTopBar.jsx";
 import {NAME_REGEX} from "@utils/validations/regex.js";
 
 function ManageResidentsPage() {
-    const [associates, setAssociates] = useState([]);
+    const [residents, setResidents] = useState([]);
     const [showEditModal, setShowEditModal] = useState(false);
-    const [selectedAssociate, setSelectedAssociate] = useState(null);
-    const [associateForRemoval, setAssociateForRemoval] = useState(null);
+    const [selectedResident, setSelectedResident] = useState(null);
+    const [residentForRemoval, setResidentForRemoval] = useState(null);
     const [loading, setLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
@@ -34,45 +34,45 @@ function ManageResidentsPage() {
 
     useEffect(() => {
         setLoading(true);
-        fetchAssociates().finally(() => setLoading(false))
+        fetchResidents().finally(() => setLoading(false))
     }, []);
 
     useEffect(() => {
-        console.log(selectedAssociate);
-        if (selectedAssociate?.name) {
-            setIsValidName(NAME_REGEX.test(selectedAssociate?.name));
+        console.log(selectedResident);
+        if (selectedResident?.name) {
+            setIsValidName(NAME_REGEX.test(selectedResident?.name));
         }
-    }, [selectedAssociate]);
+    }, [selectedResident]);
 
-    const fetchAssociates = async () => {
+    const fetchResidents = async () => {
         try {
-            const associateData = await fetchAllAssociates();
-            setAssociates(associateData);
+            const residentData = await fetchAllResidents();
+            setResidents(residentData);
         } catch (error) {
             setErrorMessage("Failed to fetch residents. Please try again later.")
         }
     };
 
-    const fetchAllAssociates = async (url = `/associates`) => {
-        let allAssociates = [];
+    const fetchAllResidents = async (url = `/residents`) => {
+        let allResidents = [];
         try {
             const response = await axiosPrivate.get(url);
             //console.log(response);
-            const filteredAssociates = response?.data?.results
-            allAssociates = [...filteredAssociates];
+            const filteredResidents = response?.data?.results
+            allResidents = [...filteredResidents];
 
             if (response?.data?.next) {
-                const nextPageAssociates = await fetchAllAssociates(response?.data?.next);
-                allAssociates = [...allAssociates, ...nextPageAssociates];
+                const nextPageResidents = await fetchAllResidents(response?.data?.next);
+                allResidents = [...allResidents, ...nextPageResidents];
             }
         } catch (error) {
             setErrorMessage("Failed to fetch residents. Please try again later.")
         }
-        return allAssociates;
+        return allResidents;
     };
 
-    const handleShowEditModal = (associate) => {
-        setSelectedAssociate(associate);
+    const handleShowEditModal = (resident) => {
+        setSelectedResident(resident);
         setShowEditModal(true);
     };
 
@@ -83,13 +83,13 @@ function ManageResidentsPage() {
         setEditLoading(true);
         try {
             // Replace PUT with PATCH
-            await axiosPrivate.patch(selectedAssociate.url, {
-                name: selectedAssociate.name,
-                //date_of_birth: selectedAssociate.date_of_birth,
+            await axiosPrivate.patch(selectedResident.url, {
+                name: selectedResident.name,
+                //date_of_birth: selectedResident.date_of_birth,
             });
-            setAssociates((prevAssociates) =>
-                prevAssociates.map((associate) =>
-                    associate.id === selectedAssociate.id ? selectedAssociate : associate
+            setResidents((prevResidents) =>
+                prevResidents.map((resident) =>
+                    resident.id === selectedResident.id ? selectedResident : resident
                 )
             );
             setSuccessMessage("Successfully updated resident details.");
@@ -107,13 +107,13 @@ function ManageResidentsPage() {
         setSuccessMessage("");
         setDeleteLoading(true);
         try {
-            if (associateForRemoval === null) {
+            if (residentForRemoval === null) {
                 setErrorMessage("Please select a resident to delete!");
                 return;
             }
-            await axiosPrivate.delete(`/associates/${associateForRemoval}/`);
-            setAssociates((prevAssociates) =>
-                prevAssociates.filter((associate) => associate.id !== associateForRemoval)
+            await axiosPrivate.delete(`/residents/${residentForRemoval}/`);
+            setResidents((prevResidents) =>
+                prevResidents.filter((resident) => resident.id !== residentForRemoval)
             );
             setSuccessMessage("Successfully deleted resident details.");
         } catch (error) {
@@ -135,7 +135,7 @@ function ManageResidentsPage() {
 
     const toggleConfirmRemoveModal = () => {
         if (showConfirmRemoveModal) {
-            setAssociateForRemoval(null);
+            setResidentForRemoval(null);
         }
         setShowConfirmRemoveModal(!showConfirmRemoveModal);
     };
@@ -151,7 +151,7 @@ function ManageResidentsPage() {
             </Container>)
             :
             <Container fluid className="m-3 border rounded-4 p-4">
-                {associates?.length ?
+                {residents?.length ?
                     <Table responsive hover className={styles.carehomeItem}>
                         <thead className="p-3">
                         <tr>
@@ -162,16 +162,16 @@ function ManageResidentsPage() {
                         </tr>
                         </thead>
                         <tbody>
-                        {associates.map((associate, index) => (
+                        {residents.map((resident, index) => (
                             <tr key={index}>
-                                <td>{associate.name}</td>
-                                <td>{associate.date_of_birth}</td>
-                                <td>{associate.care_home.name}</td>
+                                <td>{resident.name}</td>
+                                <td>{resident.date_of_birth}</td>
+                                <td>{resident.care_home.name}</td>
                                 <td>
                                     <Button
                                         className={styles.fixButton}
                                         variant="success"
-                                        onClick={() => handleShowEditModal(associate)}
+                                        onClick={() => handleShowEditModal(resident)}
                                         disabled={deleteLoading}
                                     >
                                         Edit
@@ -180,7 +180,7 @@ function ManageResidentsPage() {
                                         className={styles.fixButton}
                                         variant="danger"
                                         onClick={() => {
-                                            setAssociateForRemoval(associate.id);
+                                            setResidentForRemoval(resident.id);
                                             toggleConfirmRemoveModal();
                                         }}
                                         disabled={deleteLoading}
@@ -208,7 +208,7 @@ function ManageResidentsPage() {
 
                 <Modal show={showEditModal} onHide={() => setShowEditModal(false)} centered>
                     <Modal.Header closeButton>
-                        <Modal.Title>Edit Associate</Modal.Title>
+                        <Modal.Title>Edit Resident</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <Form onSubmit={handleEditSubmit}>
@@ -217,15 +217,15 @@ function ManageResidentsPage() {
                                 <InputGroup hasValidation>
                                     <Form.Control
                                         type="text"
-                                        value={selectedAssociate?.name || ""}
+                                        value={selectedResident?.name || ""}
                                         onChange={(e) =>
-                                            setSelectedAssociate({
-                                                ...selectedAssociate,
+                                            setSelectedResident({
+                                                ...selectedResident,
                                                 name: e.target.value,
                                             })
                                         }
-                                        isValid={selectedAssociate?.name && isValidName}
-                                        isInvalid={selectedAssociate?.name && !isValidName}
+                                        isValid={selectedResident?.name && isValidName}
+                                        isInvalid={selectedResident?.name && !isValidName}
                                         required
                                     />
                                     <Form.Control.Feedback type="valid">
@@ -268,7 +268,7 @@ function ManageResidentsPage() {
                     <Modal.Footer>
                         <Button variant="secondary" onClick={() => {
                             toggleConfirmRemoveModal();
-                            setAssociateForRemoval(null);
+                            setResidentForRemoval(null);
                         }}>
                             Cancel
                         </Button>

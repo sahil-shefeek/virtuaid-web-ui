@@ -10,7 +10,7 @@ export const SearchBar = ({setResults}) => {
 
     const fetchData = async (value) => {
         try {
-            const response = await axiosPrivate.get("/associates/", {
+            const response = await axiosPrivate.get("/residents/", {
                 params: {
                     search: value
                 }

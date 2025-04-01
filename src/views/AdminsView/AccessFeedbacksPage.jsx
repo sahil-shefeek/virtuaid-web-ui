@@ -1,6 +1,6 @@
 import {Route, Routes} from "react-router-dom";
 import FeedbackView from "@components/Feedbacks/FeedbackView.jsx";
-import AssociateSearch from "@components/AssociateSearch.jsx";
+import ResidentSearch from "@components/ResidentSearch.jsx";
 import useTopBar from "@hooks/useTopBar.jsx";
 
 
@@ -9,8 +9,8 @@ const AccessFeedbacksPage = () => {
     setTitle("View Feedback");
     return (
         <Routes>
-            <Route path="/" element={<AssociateSearch/>}/>
-            <Route path="/:associateName" element={<FeedbackView/>}/>
+            <Route path="/" element={<ResidentSearch/>}/>
+            <Route path="/:residentName" element={<FeedbackView/>}/>
         </Routes>
     );
 };

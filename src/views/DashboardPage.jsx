@@ -8,25 +8,25 @@ import {axiosPrivate} from "@/api/axios.js";
 function DashboardPage() {
     const {auth} = useAuth();
     const {setTitle} = useTopBar();
-    const [numAssociates, setNumAssociates] = useState(0);
+    const [numResidents, setNumResidents] = useState(0);
     const [numFeedbacks, setNumFeedbacks] = useState(0);
     const [numAdmins, setNumAdmins] = useState(0);
     const [numCarehomes, setNumCarehomes] = useState(0);
 
-    const [loadingAssociates, setLoadingAssociates] = useState(false);
+    const [loadingResidents, setLoadingResidents] = useState(false);
     const [loadingFeedbacks, setLoadingFeedbacks] = useState(false);
     const [loadingAdmins, setLoadingAdmins] = useState(false);
     const [loadingCarehomes, setLoadingCarehomes] = useState(false);
 
-    const getNumAssociates = async () => {
-        setLoadingAssociates(true);
+    const getNumResidents = async () => {
+        setLoadingResidents(true);
         try {
-            const response = await axiosPrivate("/associates/");
-            setNumAssociates(response?.data?.count);
+            const response = await axiosPrivate("/residents/");
+            setNumResidents(response?.data?.count);
         } catch (error) {
             console.log("Error");
         } finally {
-            setLoadingAssociates(false);
+            setLoadingResidents(false);
         }
     };
 
@@ -73,7 +73,7 @@ function DashboardPage() {
     useEffect(() => {
         if (auth?.isAdmin) {
             getNumFeedbacks();
-            getNumAssociates();
+            getNumResidents();
         }
 
         if (auth?.isSuperAdmin) {
@@ -91,15 +91,15 @@ function DashboardPage() {
                 {auth.isAdmin && (
                     <>
                         <div className="insights mb-4">
-                            <div className="total-associates">
+                            <div className="total-residents">
                                 <span className="material-symbols-rounded">person</span>
                                 <div className="middle">
                                     <div className="left">
                                         <h3>Total residents</h3>
-                                        {loadingAssociates ? (
+                                        {loadingResidents ? (
                                             <Spinner animation="border" size="sm" />
                                         ) : (
-                                            <h1>{numAssociates}</h1>
+                                            <h1>{numResidents}</h1>
                                         )}
                                     </div>
                                     <div className="progress"></div>
@@ -127,7 +127,7 @@ function DashboardPage() {
                 )}
                 {auth.isSuperAdmin && (
                     <div className="insights">
-                        <div className="total-associates">
+                        <div className="total-residents">
                             <span className="material-symbols-rounded">person</span>
                             <div className="middle">
                                 <div className="left">

@@ -7,19 +7,19 @@ import useAxiosPrivate from '@hooks/useAxiosPrivate';
 
 const AccessReportsView = () => {
     const {state} = useLocation();
-    const associateId = state?.associateId;
-    const associateName = state?.associateName;
-    const [selectedAssociate, setSelectedAssociate] = useState(null);
+    const residentId = state?.residentId;
+    const residentName = state?.residentName;
+    const [selectedResident, setSelectedResident] = useState(null);
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
     const axiosPrivate = useAxiosPrivate();
 
     useEffect(() => {
-        setSelectedAssociate({name: associateName});
-    }, [associateName]);
+        setSelectedResident({name: residentName});
+    }, [residentName]);
 
 
-    const fetchReports = async (associateName, startDate, endDate) => {
+    const fetchReports = async (residentName, startDate, endDate) => {
         console.log('Fetching reports...');
         console.log('Start Date:', startDate);
         console.log('End Date:', endDate);
@@ -29,7 +29,7 @@ const AccessReportsView = () => {
             while (nextUrl) {
                 const {data} = await axiosPrivate.get(nextUrl, {
                     params: {
-                        associate: associateId,
+                        resident: residentId,
                         start_date: startDate.toISOString().split('T')[0],
                         end_date: endDate.toISOString().split('T')[0],
                     }
@@ -46,8 +46,8 @@ const AccessReportsView = () => {
     };
 
     const reportQuery = useQuery({
-        queryKey: ["reports", associateName, startDate, endDate],
-        queryFn: () => fetchReports(associateName, startDate, endDate),
+        queryKey: ["reports", residentName, startDate, endDate],
+        queryFn: () => fetchReports(residentName, startDate, endDate),
         enabled: false
     });
 
@@ -64,7 +64,7 @@ const AccessReportsView = () => {
     return (
         <Container fluid className="my-5 mx-3 px-5 text-center">
             <Container fluid className="border rounded-4 shadow-sm mx-2 py-4 mb-5">
-                <h1 className="mt-2 mb-5">Reports for {associateName}</h1>
+                <h1 className="mt-2 mb-5">Reports for {residentName}</h1>
                 <DateRangePicker
                     startDate={startDate}
                     endDate={endDate}

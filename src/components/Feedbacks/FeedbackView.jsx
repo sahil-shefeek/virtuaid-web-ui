@@ -7,8 +7,8 @@ import styles from './FeedbackView.module.scss';
 
 const FeedbackView = () => {
     const {state} = useLocation();
-    const associateId = state?.associateId;
-    const associateName = state?.associateName;
+    const residentId = state?.residentId;
+    const residentName = state?.residentName;
     const [alertMessage, setAlertMessage] = useState("");
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
@@ -25,7 +25,7 @@ const FeedbackView = () => {
         try {
             const {data} = await axiosPrivate.get(nextUrl, {
                 params: {
-                    associate: associateId,
+                    resident: residentId,
                     start_date: startDate.toISOString().split('T')[0],
                     end_date: endDate.toISOString().split('T')[0],
                 }
@@ -101,7 +101,7 @@ const FeedbackView = () => {
         <Container fluid className="border rounded-4 shadow-sm my-5 mx-3 py-4">
 
             <h2 className="text-center mt-4 mb-3">Feedback for resident: </h2>
-            <h1 className="mt-3 mb-5 text-center">{associateName}</h1>
+            <h1 className="mt-3 mb-5 text-center">{residentName}</h1>
             <DateRangePicker
                 startDate={startDate}
                 endDate={endDate}

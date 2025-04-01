@@ -4,18 +4,18 @@ import {useNavigate} from 'react-router-dom';
 import useAxiosPrivate from "@hooks/useAxiosPrivate.jsx";
 import {useQuery} from '@tanstack/react-query';
 
-const AssociateSearch = () => {
+const ResidentSearch = () => {
     const [search, setSearch] = useState('');
-    const [associates, setAssociates] = useState([]);
-    const [filteredAssociates, setFilteredAssociates] = useState([]);
-    const [selectedAssociate, setSelectedAssociate] = useState(null);
+    const [residents, setResidents] = useState([]);
+    const [filteredResidents, setFilteredResidents] = useState([]);
+    const [selectedResident, setSelectedResident] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const axiosPrivate = useAxiosPrivate();
     const navigate = useNavigate();
 
-    const fetchAssociates = async () => {
+    const fetchResidents = async () => {
         let allResults = [];
-        let nextUrl = "/associates/";
+        let nextUrl = "/residents/";
         try {
             while (nextUrl) {
                 const {data} = await axiosPrivate.get(nextUrl);
@@ -28,15 +28,15 @@ const AssociateSearch = () => {
         return allResults;
     };
 
-    const associateQuery = useQuery({
-        queryKey: ["associates"], queryFn: fetchAssociates, enabled: false
+    const residentQuery = useQuery({
+        queryKey: ["residents"], queryFn: fetchResidents, enabled: false
     });
 
     useEffect(() => {
         setIsLoading(true);
-        associateQuery.refetch()
+        residentQuery.refetch()
             .then((result) => {
-                setAssociates(result.data || []);
+                setResidents(result.data || []);
             })
             .catch((error) => console.log(error))
             .finally(() => setIsLoading(false));
@@ -47,30 +47,30 @@ const AssociateSearch = () => {
     };
 
     useEffect(() => {
-        setFilteredAssociates(associates.filter(associate => associate.name.toLowerCase().includes(search.toLowerCase())));
-    }, [search, associates]);
+        setFilteredResidents(residents.filter(resident => resident.name.toLowerCase().includes(search.toLowerCase())));
+    }, [search, residents]);
 
-    const handleSelect = (associate) => {
-        setSelectedAssociate(associate);
-        onselect(associate);
-        navigate(`/reports/${associate.name}`);
+    const handleSelect = (resident) => {
+        setSelectedResident(resident);
+        onselect(resident);
+        navigate(`/reports/${resident.name}`);
     };
 
     const handleClearSelection = () => {
-        setSelectedAssociate(null);
+        setSelectedResident(null);
     };
 
     const handleProceed = () => {
-        if (selectedAssociate) {
+        if (selectedResident) {
             const basePath = location.pathname.startsWith('/reports') ? '/reports' : '/feedbacks';
             const action = location.pathname.includes('/add') ? 'add' : 'view';
-            navigate(`${basePath}/${action}/${selectedAssociate.name}`, {
+            navigate(`${basePath}/${action}/${selectedResident.name}`, {
                 state: {
-                    associateId: selectedAssociate.id, associateName: selectedAssociate.name
+                    residentId: selectedResident.id, residentName: selectedResident.name
                 }
             });
         } else {
-            alert('Please select an associate.');
+            alert('Please select an resident.');
         }
     };
 
@@ -98,13 +98,13 @@ const AssociateSearch = () => {
                     <h2 className="m-3">Loading...</h2>
                 </Container>)
                 :
-                associates?.length ?
-                    (selectedAssociate ?
+                residents?.length ?
+                    (selectedResident ?
                         (<>
                             <Card className="mb-3">
                                 <Card.Body className="d-flex justify-content-between align-items-center">
                                     <div className="fw-bold">
-                                        {selectedAssociate.name}
+                                        {selectedResident.name}
                                     </div>
                                     <Button variant="danger" onClick={handleClearSelection}>Clear Selection</Button>
                                 </Card.Body>
@@ -118,12 +118,12 @@ const AssociateSearch = () => {
                             as={CardGroup}
                             variant="flush"
                         >
-                            {filteredAssociates.map(associate => (<ListGroup.Item
+                            {filteredResidents.map(resident => (<ListGroup.Item
                                 className="d-flex justify-content-between align-items-start"
                                 as={Card}
                                 action
-                                key={associate.id}
-                                onClick={() => handleSelect(associate)}
+                                key={resident.id}
+                                onClick={() => handleSelect(resident)}
                             >
                                 <Card.Body className="fw-bold">
                                     <Container
@@ -131,7 +131,7 @@ const AssociateSearch = () => {
                                     >
                                         <span className="material-symbols-rounded">person</span>
 
-                                        <h3 className="mx-3 pt-2">{associate.name}</h3>
+                                        <h3 className="mx-3 pt-2">{resident.name}</h3>
                                     </Container>
                                 </Card.Body>
                             </ListGroup.Item>))}
@@ -143,10 +143,10 @@ const AssociateSearch = () => {
                                 className="material-symbols-rounded align-text-top">person_off</span></h2>
                         </Alert>
                     )}
-            {associateQuery.isError && (
-                <Alert variant="danger" className="mb-3">{associateQuery.error.message}</Alert>)}
+            {residentQuery.isError && (
+                <Alert variant="danger" className="mb-3">{residentQuery.error.message}</Alert>)}
         </section>
     </Container>);
 };
 
-export default AssociateSearch;
+export default ResidentSearch;
