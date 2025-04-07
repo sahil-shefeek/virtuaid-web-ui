@@ -118,23 +118,18 @@ function AddSessionsPage() {
                 </Container>
             ) : (
                 <Container fluid className="m-3">
-                    <Card className="shadow-sm mb-4 border rounded-4">
-                        <Card.Header as="h4" className="p-3">Schedule a New Session</Card.Header>
-                        <Card.Body className="p-4">
-                            {residents.length === 0 ? (
+                    {residents.length === 0 ? (
+                        <Card className="shadow-sm mb-4 border rounded-4">
+                            <Card.Body className="p-4">
                                 <Alert variant="info" className="rounded-4 border shadow-sm p-3">
                                     <h2 className="p-3 text-center">
                                         No residents available for scheduling sessions.
                                         <span className="material-symbols-rounded align-text-top">person_off</span>
                                     </h2>
                                 </Alert>
-                            ) : (
-                                <p>Select a resident and schedule a date for their session using the form below.</p>
-                            )}
-                        </Card.Body>
-                    </Card>
-
-                    {residents.length > 0 && (
+                            </Card.Body>
+                        </Card>
+                    ) : (
                         <Card className="shadow-sm border rounded-4">
                             <Card.Body className="p-4">
                                 <Form onSubmit={handleSubmit}>
