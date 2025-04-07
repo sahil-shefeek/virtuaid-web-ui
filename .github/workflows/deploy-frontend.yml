@@ -1,0 +1,28 @@
+name: Deploy React Frontend
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy-frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Setup SSH
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.DEPLOY_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan -H virtuaid.sahilshefeek.live >> ~/.ssh/known_hosts
+
+    - name: Deploy React
+      run: |
+        ssh ci-deploy@virtuaid.sahilshefeek.live << 'EOF'
+          cd /home/ci-deploy/virtuaid-web-ui
+          git pull origin main
+          npm install
+          npm run build
+          sudo systemctl restart nginx
+        EOF
